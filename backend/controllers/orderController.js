@@ -3,6 +3,11 @@ import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 
 const addOrderItems = asyncHandler(async (req, res) => {
+  if (req.user.isAdmin) {
+    res.status(403);
+    throw new Error('Admin accounts cannot place customer orders');
+  }
+
   const {
     orderItems,
     shippingAddress,

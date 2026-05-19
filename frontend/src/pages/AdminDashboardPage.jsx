@@ -10,6 +10,7 @@ const orderStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancell
 const AdminDashboardPage = () => {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -17,12 +18,14 @@ const AdminDashboardPage = () => {
     setLoading(true);
     setError('');
     try {
-      const [{ data: productsData }, { data: ordersData }] = await Promise.all([
+      const [{ data: productsData }, { data: ordersData }, { data: usersData }] = await Promise.all([
         api.get('/products'),
-        api.get('/orders')
+        api.get('/orders'),
+        api.get('/users')
       ]);
       setProducts(productsData.products);
       setOrders(ordersData);
+      setUsers(usersData);
     } catch (err) {
       setError(err.response?.data?.message || 'Unable to load admin data');
     } finally {
@@ -36,13 +39,31 @@ const AdminDashboardPage = () => {
 
   const deleteProduct = async (productId) => {
     if (!window.confirm('Delete this product?')) return;
-    await api.delete(`/products/${productId}`);
-    setProducts((items) => items.filter((item) => item._id !== productId));
+    try {
+      await api.delete(`/products/${productId}`);
+      setProducts((items) => items.filter((item) => item._id !== productId));
+    } catch (err) {
+      setError(err.response?.data?.message || 'Unable to delete product');
+    }
   };
 
   const updateOrderStatus = async (orderId, status) => {
-    const { data } = await api.put(`/orders/${orderId}`, { status });
-    setOrders((items) => items.map((item) => (item._id === orderId ? data : item)));
+    try {
+      const { data } = await api.put(`/orders/${orderId}`, { status });
+      setOrders((items) => items.map((item) => (item._id === orderId ? data : item)));
+    } catch (err) {
+      setError(err.response?.data?.message || 'Unable to update order status');
+    }
+  };
+
+  const deleteCustomer = async (userId) => {
+    if (!window.confirm('Delete this customer account?')) return;
+    try {
+      await api.delete(`/users/${userId}`);
+      setUsers((items) => items.filter((item) => item._id !== userId));
+    } catch (err) {
+      setError(err.response?.data?.message || 'Unable to delete customer');
+    }
   };
 
   if (loading) return <LoadingSpinner label="Loading admin dashboard" />;
@@ -107,12 +128,14 @@ const AdminDashboardPage = () => {
         </div>
 
         <div className="admin-panel">
-          <h2>Orders</h2>
+          <h2>All User Orders</h2>
           <div className="table-wrap">
             <table>
               <thead>
                 <tr>
+                  <th>Order</th>
                   <th>Customer</th>
+                  <th>Items</th>
                   <th>Total</th>
                   <th>Status</th>
                   <th>Date</th>
@@ -121,7 +144,12 @@ const AdminDashboardPage = () => {
               <tbody>
                 {orders.map((order) => (
                   <tr key={order._id}>
-                    <td>{order.user?.name || 'Deleted user'}</td>
+                    <td>{order._id.slice(-8)}</td>
+                    <td>
+                      {order.user?.name || 'Deleted user'}
+                      <span className="table-subtext">{order.user?.email}</span>
+                    </td>
+                    <td>{order.orderItems.map((item) => `${item.name} x ${item.quantity}`).join(', ')}</td>
                     <td>${order.totalPrice.toFixed(2)}</td>
                     <td>
                       <select
@@ -136,6 +164,47 @@ const AdminDashboardPage = () => {
                       </select>
                     </td>
                     <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="admin-panel">
+          <h2>Customer Accounts</h2>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user._id}>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.isAdmin ? 'Admin' : 'Customer'}</td>
+                    <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+                    <td>
+                      {user.isAdmin ? (
+                        <span className="admin-note">Protected</span>
+                      ) : (
+                        <button
+                          className="icon-button danger"
+                          type="button"
+                          title="Delete customer account"
+                          onClick={() => deleteCustomer(user._id)}
+                        >
+                          <Trash2 size={17} />
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

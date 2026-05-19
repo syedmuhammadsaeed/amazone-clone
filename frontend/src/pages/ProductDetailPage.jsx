@@ -4,12 +4,14 @@ import { ShoppingCart } from 'lucide-react';
 import ErrorMessage from '../components/ErrorMessage.jsx';
 import LoadingSpinner from '../components/LoadingSpinner.jsx';
 import StarRating from '../components/StarRating.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import { useCart } from '../context/CartContext.jsx';
 import api from '../utils/api.js';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -63,31 +65,38 @@ const ProductDetailPage = () => {
             <span>Price</span>
             <strong>${product.price.toFixed(2)}</strong>
           </div>
-          <div className="purchase-row">
-            <label>
-              Quantity
-              <select
-                value={quantity}
+          {user?.isAdmin ? (
+            <div className="notice-panel">
+              Admin accounts manage products and orders only. Use the admin dashboard to edit this
+              product.
+            </div>
+          ) : (
+            <div className="purchase-row">
+              <label>
+                Quantity
+                <select
+                  value={quantity}
+                  disabled={product.countInStock === 0}
+                  onChange={(event) => setQuantity(Number(event.target.value))}
+                >
+                  {[...Array(product.countInStock).keys()].slice(0, 10).map((item) => (
+                    <option key={item + 1} value={item + 1}>
+                      {item + 1}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button
+                className="primary-button"
+                type="button"
                 disabled={product.countInStock === 0}
-                onChange={(event) => setQuantity(Number(event.target.value))}
+                onClick={handleAddToCart}
               >
-                {[...Array(product.countInStock).keys()].slice(0, 10).map((item) => (
-                  <option key={item + 1} value={item + 1}>
-                    {item + 1}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button
-              className="primary-button"
-              type="button"
-              disabled={product.countInStock === 0}
-              onClick={handleAddToCart}
-            >
-              <ShoppingCart size={18} />
-              Add to Cart
-            </button>
-          </div>
+                <ShoppingCart size={18} />
+                Add to Cart
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </section>

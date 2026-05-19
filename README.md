@@ -127,6 +127,11 @@ After running the seed script:
 - `GET /api/orders` admin only
 - `PUT /api/orders/:id` admin only
 
+### Users
+
+- `GET /api/users` admin only
+- `DELETE /api/users/:id` admin only, customer accounts only
+
 ## Postman Testing Guidance
 
 Set a Postman environment variable:

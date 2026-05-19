@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
 import { ShoppingCart } from 'lucide-react';
+import { useAuth } from '../context/AuthContext.jsx';
 import { useCart } from '../context/CartContext.jsx';
 import StarRating from './StarRating.jsx';
 
 const ProductCard = ({ product }) => {
+  const { user } = useAuth();
   const { addToCart } = useCart();
+  const isAdmin = Boolean(user?.isAdmin);
 
   return (
     <article className="product-card">
@@ -19,15 +22,19 @@ const ProductCard = ({ product }) => {
         <StarRating rating={product.rating} reviews={product.numReviews} />
         <div className="product-card-footer">
           <strong>${product.price.toFixed(2)}</strong>
-          <button
-            className="icon-button dark"
-            type="button"
-            title="Add to cart"
-            disabled={product.countInStock === 0}
-            onClick={() => addToCart(product, 1)}
-          >
-            <ShoppingCart size={18} />
-          </button>
+          {isAdmin ? (
+            <span className="admin-note">Manage only</span>
+          ) : (
+            <button
+              className="icon-button dark"
+              type="button"
+              title="Add to cart"
+              disabled={product.countInStock === 0}
+              onClick={() => addToCart(product, 1)}
+            >
+              <ShoppingCart size={18} />
+            </button>
+          )}
         </div>
       </div>
     </article>

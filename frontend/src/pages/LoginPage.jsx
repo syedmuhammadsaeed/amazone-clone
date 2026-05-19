@@ -16,8 +16,8 @@ const LoginPage = () => {
     event.preventDefault();
     setError('');
     try {
-      await login(credentials);
-      navigate(redirect);
+      const userInfo = await login(credentials);
+      navigate(userInfo.isAdmin ? '/admin' : redirect);
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     }

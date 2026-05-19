@@ -243,7 +243,8 @@ button:disabled {
 
 .product-meta,
 .muted,
-.hint {
+.hint,
+.table-subtext {
   color: var(--muted);
 }
 
@@ -517,6 +518,27 @@ th {
   color: var(--success);
   font-weight: 800;
   font-size: 0.84rem;
+}
+
+.admin-note {
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.notice-panel {
+  border: 1px solid #fde2ad;
+  border-radius: 8px;
+  padding: 14px;
+  background: #fff8e8;
+  color: #8a5200;
+  line-height: 1.5;
+}
+
+.table-subtext {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.82rem;
 }
 
 .empty-state,

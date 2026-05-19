@@ -61,6 +61,17 @@ const CartPage = () => {
     }
   };
 
+  if (user?.isAdmin) {
+    return (
+      <section className="page-section">
+        <div className="empty-state">
+          Admin accounts cannot use the cart or place orders. Go to the{' '}
+          <Link to="/admin">admin dashboard</Link> to manage products, customers, and orders.
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="page-section">
       <div className="section-heading">

@@ -24,18 +24,20 @@ const Navbar = () => {
           <NavLink to="/" end>
             Products
           </NavLink>
-          {user && (
+          {user && !user.isAdmin && (
             <NavLink to="/orders">
               <PackagePlus size={17} />
               Orders
             </NavLink>
           )}
           {user?.isAdmin && <NavLink to="/admin">Admin</NavLink>}
-          <NavLink to="/cart" className="cart-link">
-            <ShoppingCart size={18} />
-            Cart
-            {itemCount > 0 && <span className="cart-badge">{itemCount}</span>}
-          </NavLink>
+          {!user?.isAdmin && (
+            <NavLink to="/cart" className="cart-link">
+              <ShoppingCart size={18} />
+              Cart
+              {itemCount > 0 && <span className="cart-badge">{itemCount}</span>}
+            </NavLink>
+          )}
           {user ? (
             <button className="nav-button" type="button" onClick={handleLogout}>
               <LogOut size={17} />
