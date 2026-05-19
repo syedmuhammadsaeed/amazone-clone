@@ -9,3 +9,36 @@
 [32m[nodemon] starting `node server.js`[39m
 Server running on port 5000
 MongoDB connected: 127.0.0.1
+[0mPOST /api/auth/login [32m200[0m 233.467 ms - 279[0m
+[0mGET /api/products [32m200[0m 63.093 ms - 4860[0m
+[0mGET /api/products? [32m200[0m 26.918 ms - 4860[0m
+[0mGET /api/products? [36m304[0m 26.942 ms - -[0m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Server running on port 5000
+MongoDB connected: 127.0.0.1
+[0mGET /api/products? [32m200[0m 77.463 ms - 4860[0m
+[0mGET /api/products? [36m304[0m 32.193 ms - -[0m
+[0mGET /api/products [32m200[0m 25.817 ms - 4860[0m
+[0mGET /api/products? [36m304[0m 22.729 ms - -[0m
+[0mPOST /api/auth/login [32m200[0m 213.250 ms - 279[0m
+[0mPOST /api/auth/login [32m200[0m 163.251 ms - 286[0m
+[0mPOST /api/products [32m201[0m 43.073 ms - 413[0m
+[0mPUT /api/products/6a0c87aed2449a7da6487302 [32m200[0m 22.535 ms - 413[0m
+[0mDELETE /api/products/6a0c87aed2449a7da6487302 [32m200[0m 18.558 ms - 29[0m
+[0mGET /api/products [32m200[0m 15.820 ms - 4860[0m
+[0mPOST /api/orders [32m201[0m 39.889 ms - 611[0m
+[0mGET /api/orders/my [32m200[0m 15.063 ms - 613[0m
+[0mPUT /api/orders/6a0c87aed2449a7da648730f [32m200[0m 16.904 ms - 611[0m
+[0mGET /api/products? [32m200[0m 121.410 ms - 4860[0m
+[0mGET /api/products? [36m304[0m 197.714 ms - -[0m
+[0mGET / [32m200[0m 0.784 ms - 41[0m
+[0mGET /api/products [32m200[0m 31.183 ms - 4860[0m
+[0mGET /api/products? [36m304[0m 42.621 ms - -[0m
+[0mGET /api/products? [36m304[0m 23.014 ms - -[0m
+[0mGET /api/products? [32m200[0m 52.146 ms - 4860[0m
+[0mGET /api/products?category=Computers [32m200[0m 36.928 ms - 1073[0m
+[0mGET /api/products?category=Furniture [32m200[0m 28.279 ms - 612[0m
+[0mGET /api/products?category=Home [32m200[0m 35.349 ms - 605[0m
+[0mGET /api/products?category=Kitchen [32m200[0m 25.197 ms - 595[0m
+[0mGET /api/products?category=Wearables [32m200[0m 24.059 ms - 608[0m
